@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -37,8 +38,13 @@ public class LogAnalyzer {
     }
 
     public static void main(String[] args) {
-        String input = args.length > 0 ? args[0] : "application.log";
-        String output = args.length > 1 ? args[1] : "filtered.log";
+        // Support running from either the repository root or this assignment folder.
+        String input = args.length > 0 ? args[0]
+                : (new File("application.log").exists()
+                    ? "application.log" : "assignment-6/application.log");
+        String defaultOutput = new File(input).getParent() == null
+                ? "filtered.log" : new File(new File(input).getParent(), "filtered.log").getPath();
+        String output = args.length > 1 ? args[1] : defaultOutput;
         analyze(input, output);
     }
 }
